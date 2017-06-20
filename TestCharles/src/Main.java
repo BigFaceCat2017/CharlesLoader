@@ -41,17 +41,11 @@ public class Main {
                                     license.setRegisterToMethodType(stringClass);
                                     break;
                                 }
-
                             }
-
                         }
-
-                    } catch (Exception e
-                            ) {
+                    } catch (Exception e) {
                         return new byte[0];
                     }
-
-
                 } else if (!license.getIsLicensedMethod().isEmpty() && !license.getRegisterToMethod().isEmpty() && license.getIsLicenseClassName().equals(license.getRegisterToClassName()) && className.replace("/", ".").equals(license.getRegisterToClassName())) {
                     try {
                         CtClass licenseClass = ClassPool.getDefault().makeClass(new ByteArrayInputStream(classfileBuffer));
@@ -60,14 +54,11 @@ public class Main {
                         isLicenseMethod.setBody("return true;");
                         CtClass registerToClass = licenseClass.getClassPool().getCtClass(license.getRegisterToClassName());
                         CtMethod registerToMethod = registerToClass.getDeclaredMethod(license.getRegisterToMethod());
-                        registerToMethod.setBody("return \"www.52pojie.cn\";");
+                        registerToMethod.setBody("return \"qtfreet00 www.52pojie.cn\";");
                         return licenseClass.toBytecode();
-                    } catch (Exception e
-                            ) {
+                    } catch (Exception e) {
                         return new byte[0];
                     }
-
-
                 }
                 return new byte[0];
             }

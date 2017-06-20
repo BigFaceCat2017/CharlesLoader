@@ -3,9 +3,10 @@
     <output-path>$PROJECT_DIR$/out/artifacts/TestCharles_jar</output-path>
     <root id="archive" name="TestCharles.jar">
       <element id="module-output" name="TestCharles" />
-      <element id="library" level="project" name="loader" />
-      <element id="library" level="project" name="charles" />
       <element id="extracted-dir" path="$PROJECT_DIR$/javassist.jar" path-in-jar="/" />
+      <element id="library" level="project" name="charles1" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/charles.jar" path-in-jar="/" />
+      <element id="library" level="project" name="loader" />
     </root>
   </artifact>
 </component>

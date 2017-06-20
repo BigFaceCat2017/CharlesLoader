@@ -10,5 +10,6 @@
     <orderEntry type="library" name="charles" level="project" />
     <orderEntry type="library" name="javassist" level="project" />
     <orderEntry type="library" name="loader" level="project" />
+    <orderEntry type="library" name="charles1" level="project" />
   </component>
 </module>

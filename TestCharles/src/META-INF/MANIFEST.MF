@@ -1,6 +1,4 @@
 Manifest-Version: 1.0
+Main-Class: Crack
 Premain-Class: Main
 Can-Redefine-Classes: true
-
-
-
