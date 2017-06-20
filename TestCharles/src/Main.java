@@ -49,11 +49,9 @@ public class Main {
                 } else if (!license.getIsLicensedMethod().isEmpty() && !license.getRegisterToMethod().isEmpty() && license.getIsLicenseClassName().equals(license.getRegisterToClassName()) && className.replace("/", ".").equals(license.getRegisterToClassName())) {
                     try {
                         CtClass licenseClass = ClassPool.getDefault().makeClass(new ByteArrayInputStream(classfileBuffer));
-                        CtClass isLincensedClass = licenseClass.getClassPool().getCtClass(license.getIsLicenseClassName());
-                        CtMethod isLicenseMethod = isLincensedClass.getDeclaredMethod(license.getIsLicensedMethod());
+                        CtMethod isLicenseMethod = licenseClass.getDeclaredMethod(license.getIsLicensedMethod(), null);
                         isLicenseMethod.setBody("return true;");
-                        CtClass registerToClass = licenseClass.getClassPool().getCtClass(license.getRegisterToClassName());
-                        CtMethod registerToMethod = registerToClass.getDeclaredMethod(license.getRegisterToMethod());
+                        CtMethod registerToMethod = licenseClass.getDeclaredMethod(license.getRegisterToMethod(), null);
                         registerToMethod.setBody("return \"qtfreet00 www.52pojie.cn\";");
                         return licenseClass.toBytecode();
                     } catch (Exception e) {

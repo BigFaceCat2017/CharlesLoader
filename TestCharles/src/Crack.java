@@ -33,6 +33,8 @@ public class Crack {
                 String methodName = constPool.getMethodrefName(i);
                 String signature = constPool.getMethodrefType(i);
                 if (!className1.equals("com.xk72.charles.gui.SplashWindow") && className1.startsWith("com.xk72.charles") && signature.equals("()Z")) {
+                    System.out.println(className1);
+                    System.out.println(methodName);
                     license.setIsLicensedMethod(methodName);
                     license.setIsLicenseClassName(className1);
                     license.setIsLicensedMethodType(CtClass.booleanType);
@@ -50,11 +52,9 @@ public class Crack {
             System.out.println("已找到类" + license.getIsLicenseClassName());
             System.out.println("开始破解");
             CtClass licenseClass = pool.getCtClass(license.getIsLicenseClassName());
-            CtClass isLincensedClass = licenseClass.getClassPool().getCtClass(license.getIsLicenseClassName());
-            CtMethod isLicenseMethod = isLincensedClass.getDeclaredMethod(license.getIsLicensedMethod());
+            CtMethod isLicenseMethod = licenseClass.getDeclaredMethod(license.getIsLicensedMethod(), null);
             isLicenseMethod.setBody("return true;");
-            CtClass registerToClass = licenseClass.getClassPool().getCtClass(license.getRegisterToClassName());
-            CtMethod registerToMethod = registerToClass.getDeclaredMethod(license.getRegisterToMethod());
+            CtMethod registerToMethod = licenseClass.getDeclaredMethod(license.getRegisterToMethod(), null);
             registerToMethod.setBody("return \"qtfreet00 www.52pojie.cn\";");
             byte[] bytes = licenseClass.toBytecode();
             System.out.println("开始生成新jar包");
