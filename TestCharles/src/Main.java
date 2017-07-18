@@ -1,7 +1,10 @@
+import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.bytecode.ConstPool;
+import javassist.expr.ExprEditor;
+import javassist.expr.MethodCall;
 
 import java.io.ByteArrayInputStream;
 import java.lang.instrument.ClassFileTransformer;
@@ -21,27 +24,26 @@ public class Main {
                     try {
                         CtClass splashWindowClass = ClassPool.getDefault().makeClass(new ByteArrayInputStream(classfileBuffer));
                         CtClass stringClass = splashWindowClass.getClassPool().getCtClass(String.class.getName());
-                        CtMethod showRegistrationStatus = splashWindowClass.getDeclaredMethod("showRegistrationStatus");
-                        ConstPool constPool = showRegistrationStatus.getMethodInfo().getConstPool();
-                        int size = constPool.getSize();
-                        for (int i = 1; i < size; i++) {
-                            if (constPool.getTag(i) == ConstPool.CONST_Methodref) {
-                                String className1 = constPool.getMethodrefClassName(i);
-                                String methodName = constPool.getMethodrefName(i);
-                                String signature = constPool.getMethodrefType(i);
-                                if (!className1.equals("com.xk72.charles.gui.SplashWindow") && className1.startsWith("com.xk72.charles") && signature.equals("()Z")) {
-                                    license.setIsLicensedMethod(methodName);
-                                    license.setIsLicenseClassName(className1);
+                        CtMethod cls = splashWindowClass.getDeclaredMethod("showRegistrationStatus");
+                        cls.instrument(new ExprEditor() {
+                            @Override
+                            public void edit(MethodCall m) throws CannotCompileException {
+                                super.edit(m);
+                                String clazzName = m.getClassName();
+                                String md = m.getMethodName();
+                                String sign = m.getSignature();
+                                if (!clazzName.equals("com.xk72.charles.gui.SplashWindow") && clazzName.startsWith("com.xk72.charles") && sign.equals("()Z")) {
+                                    license.setIsLicensedMethod(md);
+                                    license.setIsLicenseClassName(clazzName);
                                     license.setIsLicensedMethodType(CtClass.booleanType);
-                                    continue;
                                 }
-                                if (!className1.equals("com.xk72.charles.gui.SplashWindow") && className1.startsWith("com.xk72.charles") && signature.equals("()Ljava/lang/String;")) {
-                                    license.setRegisterToMethod(methodName);
-                                    license.setRegisterToClassName(className1);
+                                if (!clazzName.equals("com.xk72.charles.gui.SplashWindow") && clazzName.startsWith("com.xk72.charles") && sign.equals("()Ljava/lang/String;")) {
+                                    license.setRegisterToMethod(md);
+                                    license.setRegisterToClassName(clazzName);
                                     license.setRegisterToMethodType(stringClass);
                                 }
                             }
-                        }
+                        });
                     } catch (Exception e) {
                         return new byte[0];
                     }
