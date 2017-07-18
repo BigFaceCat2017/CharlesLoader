@@ -14,11 +14,11 @@ import java.util.zip.ZipOutputStream;
 public class Crack {
     public static void main(String[] args) throws Exception {
         if (args.length != 2) {
-            System.out.println("请正确输入charles.jar包的路径和新生成的jar包存放路径");
+            System.out.println("please enter the correct path,such as java -jar charlesLoader.jar old.jar new.jar");
             return;
         }
         System.out.println("Charles 4.x Crack tool by qtfreet00");
-        System.out.println("开始查找待破解的方法");
+        System.out.println("start search the class");
         ClassPool pool = ClassPool.getDefault();
         pool.insertClassPath(args[0]);
         CtClass splashWindowClass = pool.getCtClass("com.xk72.charles.gui.SplashWindow");
@@ -33,33 +33,32 @@ public class Crack {
                 String methodName = constPool.getMethodrefName(i);
                 String signature = constPool.getMethodrefType(i);
                 if (!className1.equals("com.xk72.charles.gui.SplashWindow") && className1.startsWith("com.xk72.charles") && signature.equals("()Z")) {
-                    System.out.println(className1);
-                    System.out.println(methodName);
+                    System.err.println(className1 + "." + methodName + signature);
                     license.setIsLicensedMethod(methodName);
                     license.setIsLicenseClassName(className1);
                     license.setIsLicensedMethodType(CtClass.booleanType);
                     continue;
                 }
                 if (!className1.equals("com.xk72.charles.gui.SplashWindow") && className1.startsWith("com.xk72.charles") && signature.equals("()Ljava/lang/String;")) {
+                    System.err.println(className1 + "." + methodName + signature);
                     license.setRegisterToMethod(methodName);
                     license.setRegisterToClassName(className1);
                     license.setRegisterToMethodType(stringClass);
-                    break;
                 }
             }
         }
         if (!license.getIsLicensedMethod().isEmpty() && !license.getRegisterToMethod().isEmpty() && license.getIsLicenseClassName().equals(license.getRegisterToClassName())) {
-            System.out.println("已找到类" + license.getIsLicenseClassName());
-            System.out.println("开始破解");
+            System.err.println("found class " + license.getIsLicenseClassName());
+            System.out.println("start crack");
             CtClass licenseClass = pool.getCtClass(license.getIsLicenseClassName());
             CtMethod isLicenseMethod = licenseClass.getDeclaredMethod(license.getIsLicensedMethod(), null);
             isLicenseMethod.setBody("return true;");
             CtMethod registerToMethod = licenseClass.getDeclaredMethod(license.getRegisterToMethod(), null);
             registerToMethod.setBody("return \"qtfreet00 www.52pojie.cn\";");
             byte[] bytes = licenseClass.toBytecode();
-            System.out.println("开始生成新jar包");
+            System.out.println("start making new jar file");
             processJar(new File(args[0]), new File(args[1]), license.getIsLicenseClassName(), bytes);
-            System.out.println("破解完成");
+            System.err.println("crack completed");
         }
 
     }

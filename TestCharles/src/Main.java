@@ -39,7 +39,6 @@ public class Main {
                                     license.setRegisterToMethod(methodName);
                                     license.setRegisterToClassName(className1);
                                     license.setRegisterToMethodType(stringClass);
-                                    break;
                                 }
                             }
                         }
